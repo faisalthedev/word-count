@@ -38,8 +38,12 @@
     $word_count = str_word_count($stripped_content);
     // Label / Displayed text
     $label_text = __('Total number of words', 'wordcount');
+    // Add filter
+    $label_text = apply_filters('wordcount_heading', $label_text);
+    // Tag filter
+    $tag = apply_filters('wordcount_tag', 'h2');
     // show the content
-    $content .= sprintf('<h3>%s: %s</h3>', $label_text, $word_count);
+    $content .= sprintf("<%s>%s: %s</%s>", $tag, $label_text, $word_count, $tag);
     // return content
     return $content;
   }
