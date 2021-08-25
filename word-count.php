@@ -48,3 +48,26 @@
     return $content;
   }
   add_filter( 'the_content', 'wordcount_count_words');
+
+  // Add reading time
+  function wordcount_reading_time($content) {
+    // strip / remove html tags from post
+    $stripped_content = strip_tags($content);
+    // count word
+    $word_count = str_word_count($stripped_content);
+    // reading min
+    $reading_min = floor($word_count / 200);
+    // reading seconds
+    $reading_sec = floor($word_count % 200 / (200/60));
+    // Check visibility
+    $is_visiable = apply_filters('wordcount_display_readingtime', 1);
+    if($is_visiable) {
+      $label = __('Total reading time', 'wordcount');
+      $label = apply_filters('wordcount_readingtime_heading', $label);
+      $tag = apply_filters('wordcount_readingtime_tag', 'h4');
+      $content .= sprintf("<%s>%s: %s minutes, %s seconds</%s>", $tag, $label, $reading_min, $reading_sec, $tag);
+    }
+
+    return $content;
+  }
+  add_filter('the_content', 'wordcount_reading_time');
